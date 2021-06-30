@@ -82,7 +82,7 @@ void dfs(int n) {
                 }
                 popPeople(f, first);            // f자리에 first를 제거
             }
-        } else if(people[first] != -1 && people[second] != -1) {    // 둘 다 자리를 잡은 경우... 조건을 만족하면 넘어가고, 만족하지 못했으면 종료
+        } else if(people[first] != -1 && people[second] != -1) { // 둘 다 자리를 잡은 경우
             int second = parseName(datas[n][2]);
             if(isSeatable(datas[n], first, second, people[second])) dfs(n-1);  // 조건에 맞으면 다음 레벨로 내려감
         } else { // 한 명은 자리를 잡은 경우 - 나머지 한 명만 배치
