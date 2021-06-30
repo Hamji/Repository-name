@@ -4,10 +4,7 @@ copy here
 ```
 정영
 ```c++
-// 19:55 ~ 21:05
-// 10:12 ~ 10:50
-// 17:45 ~ 18:15
-// +2h
+// 19:55 ~ 21:05 + 10:12 ~ 10:50 + 17:45 ~ 18:15 (+ 2h)
 #include <string>
 #include <vector>
 #include <list>
@@ -35,17 +32,6 @@ int parseInt(int n) {
         default: return '-';
     }
 }
-void debuging(int n) {
-    printf("[%d] seat: ", n);
-    for(int i = 0; i < MAX_SIZE; i++) {
-        printf("%2c ", parseInt(seat[i]));
-    }
-    printf("/ people: ");
-    for(int i = 0; i < MAX_SIZE; i++) {
-        printf("%2d ", people[i]);
-    }
-    printf("\n");
-}
 int parseName(char c) {
     switch(c) {
         case 'A': return 0;
@@ -69,8 +55,6 @@ void popPeople(int pos, int name) {
 bool isSeatable(string data, int first, int second, int pos) {
     int range = data[4] - '0';
     if(data[3] == '=') {
-        // printf("%2d ==%2d || %2d ==%2d\n", people[first]-range-1, pos, people[first]+range+1, pos);
-        
         return people[first]-range-1 == pos || people[first]+range+1 == pos;
     } else if(data[3] == '<') {
         return people[first]-range <= pos && pos <= people[first]+range;
@@ -79,28 +63,26 @@ bool isSeatable(string data, int first, int second, int pos) {
     }
 }
 void dfs(int n) {
-    if(n==-1) {
-        // debuging(n);
+    if(n==-1) { // 탈출조건
         answer += 1;
         return;
-    } else { // A, B 둘 다 이미 자리를 잡았는지 확인
+    } else {    // A, B 둘 다 이미 자리를 잡았는지 확인
         int first = parseName(datas[n][0]);
         int second = parseName(datas[n][2]);
-        if(people[first] == -1 && people[second] == -1) { // 둘 다 안잡은 경우 - A 배치 후 B 배치, B 배치 후 A 배치
+        if(people[first] == -1 && people[second] == -1) {   // 둘 다 안잡은 경우 - A 배치 후 B 배치, B 배치 후 A 배치
             for(int f = 0; f < MAX_SIZE; f++) {
-                if(seat[f] != -1) continue;  // 해당 자리가 비어있지 않으면 넘어감
-                pushPeople(f, first); // f자리에 first를 배치
-                // printf("%d ", f);
+                if(seat[f] != -1) continue;     // 해당 자리가 비어있지 않으면 넘어감
+                pushPeople(f, first);           // f자리에 first를 배치
                 for(int s = 0; s < MAX_SIZE; s++) {
-                    if(seat[s] != -1) continue;  // 해당 자리가 비어있지 않으면 넘어감
-                    if(!isSeatable(datas[n], first, second, s)) continue; // 조건에 맞지 않으면 넘어감
-                    pushPeople(s, second); // s자리에 second를 배치
+                    if(seat[s] != -1) continue; // 해당 자리가 비어있지 않으면 넘어감
+                    if(!isSeatable(datas[n], first, second, s)) continue;   // 조건에 맞지 않으면 넘어감
+                    pushPeople(s, second);  // s자리에 second를 배치
                     dfs(n-1);
-                    popPeople(s, second); // s자리에 second를 제거
+                    popPeople(s, second);   // s자리에 second를 제거
                 }
-                popPeople(f, first);  // f자리에 first를 제거
+                popPeople(f, first);            // f자리에 first를 제거
             }
-        } else if(people[first] != -1 && people[second] != -1) { // 둘 다 자리를 잡은 경우... 조건을 만족하면 넘어가고, 만족하지 못했으면 종료
+        } else if(people[first] != -1 && people[second] != -1) {    // 둘 다 자리를 잡은 경우... 조건을 만족하면 넘어가고, 만족하지 못했으면 종료
             int second = parseName(datas[n][2]);
             if(isSeatable(datas[n], first, second, people[second])) dfs(n-1);  // 조건에 맞으면 다음 레벨로 내려감
         } else { // 한 명은 자리를 잡은 경우 - 나머지 한 명만 배치
@@ -112,7 +94,6 @@ void dfs(int n) {
                 if(seat[p] != -1) continue;  // 해당 자리가 비어있지 않으면 넘어감
                 if(!isSeatable(datas[n], seated, unseat, p)) continue; // 조건에 맞지 않으면 넘어감
                 pushPeople(p, unseat); // p자리에 unseat를 배치
-                // debuging(n);
                 dfs(n-1);
                 popPeople(p, unseat); // p자리에 unseat를 제거
             }
@@ -145,7 +126,6 @@ int solution(int n, vector<string> data) {
     for(int i = MAX_SIZE-count; i > 0; i--) {   // 배치되지 않은 사람의 팩토리얼
         factorial *= i;
     }
-    // printf("%d", answer);
     return answer * factorial;
 }
 ```
