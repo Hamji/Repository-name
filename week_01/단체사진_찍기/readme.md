@@ -3,6 +3,9 @@
 copy here
 ```
 정영
+<details markdown="1">
+<summary>접기/펼치기</summary>
+
 ```c++
 // 19:55 ~ 21:05 + 10:12 ~ 10:50 + 17:45 ~ 18:15 (+ 2h)
 #include <string>
@@ -129,6 +132,9 @@ int solution(int n, vector<string> data) {
     return answer * factorial;
 }
 ```
+
+</details>
+
 건률
 ```
 copy here
