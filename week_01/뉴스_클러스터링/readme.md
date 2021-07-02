@@ -3,8 +3,77 @@
 copy here
 ```
 정영
-```
-copy here
+<details>
+<summary>접기/펼치기 버튼</summary>
+``` c++
+// 22:00 ~ 22:40 + 09:33 ~ 09:57 + 13:41 ~ 13:59
+#include <string>
+#include <vector>
+
+using namespace std;
+
+bool isEnglish(char c) {
+    return ('a' <= c && c <='z') || ('A' <= c && c <='Z');
+}
+bool isSame(string a, string b) {
+    return a == b;
+}
+void makeLower(string &s) {
+    for(int i = 0; i < s.length(); i++) {
+        if(isEnglish(s[i]) && ('A' <= s[i] && s[i] <= 'Z')) {
+            s[i] += 'a' - 'A';
+        }
+    }
+}
+// 두 글자씩 문자열 탐색을 하면 될듯?
+// 연속된 특수문자에 대한 처리가 있으면 좋을듯
+// str2에 대해서는 확인할 필요가 있는 위치만 따로 관리하면 좋을 듯
+int solution(string str1, string str2) {
+    int answer = 0;
+    int set_count = 0; // 교집합의 개수
+    int union_count = 0; // 합집합의 개수
+    int comb_count = 0; // 가능한 원소의 합
+    vector<string> str2_comb; // str2의 조합
+    makeLower(str1);
+    makeLower(str2);
+    
+    // str2의 조합을 미리 구해놓는다.
+    for(int cur = 0; cur < str2.length(); cur++) {
+        if(!isEnglish(str2[cur])) continue;
+        if(!isEnglish(str2[cur+1])) {
+            cur++;
+            continue;
+        }
+        str2_comb.push_back(str2.substr(cur, 2));
+        comb_count++;
+    }
+    
+    // 두 글자 단위로 읽으면서 진행
+    // 가능한 원소의 합 - 교집합 수 = 합집합 수
+    for(int cur = 0; cur < str1.length()-1; cur++) {
+        // str1에서 불가능
+        if(!isEnglish(str1[cur])) continue;
+        if(!isEnglish(str1[cur+1])) {
+            cur++;
+            continue;
+        }
+        // str1에서 가능
+        comb_count++;
+        for(auto it = str2_comb.begin(); it != str2_comb.end(); ) { // str2_comb를 순회하면서 확인
+            if(isSame(str1.substr(cur, 2), *it)) { // 글자가 같으면
+                set_count++;
+                it = str2_comb.erase(it);
+                break;
+            } else {
+                it++;
+            }
+        }
+    }
+    if(comb_count == 0) return 65536;
+    union_count = comb_count - set_count;
+    answer = (float)set_count / union_count * 65536;
+    return answer;
+}
 ```
 건률(파이썬)
 <details>
