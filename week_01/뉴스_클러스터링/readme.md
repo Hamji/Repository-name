@@ -75,6 +75,8 @@ int solution(string str1, string str2) {
     return answer;
 }
 ```
+</details>
+    
 건률(파이썬)
 <details>
 <summary>접기/펼치기 버튼</summary>
