@@ -8,14 +8,10 @@ def solution(str1, str2):
     list2 = []
     
     for i, j in zip(str1, str1[1:]):
-        temp = i + j
-        if temp.isalpha():
-            list1.append(temp.upper())
+        if (i + j).isalpha() : list1.append((i + j).upper())
     
     for i, j in zip(str2, str2[1:]):
-        temp = i + j
-        if temp.isalpha():
-            list2.append(temp.upper())
+        if (i + j).isalpha() : list2.append((i + j).upper())
     
     if len(list1) > len(list2):
         inter = len([list1.remove(x) for x in list2 if x in list1])
