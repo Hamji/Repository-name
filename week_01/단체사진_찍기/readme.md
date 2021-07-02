@@ -132,7 +132,6 @@ int solution(int n, vector<string> data) {
     return answer * factorial;
 }
 ```
-
 </details>
 
 건률
