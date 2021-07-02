@@ -3,8 +3,9 @@
 copy here
 ```
 정영
-<details>
+<details markdown="1">
 <summary>접기/펼치기 버튼</summary>
+    
 ``` c++
 // 22:00 ~ 22:40 + 09:33 ~ 09:57 + 13:41 ~ 13:59
 #include <string>
