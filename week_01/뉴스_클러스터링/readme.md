@@ -1,7 +1,38 @@
 건희
+<details>
+<summary>접기/펼치기 버튼</summary>
+
+``` python
+def solution(str1, str2):
+	list1 =[]
+	list2 =[]
+
+	for i, j in zip(str1, str1[1:]) :   
+		temp = i + j
+		if temp.isalpha() : 
+            list1.append(temp.upper())
+	
+	for i, j in zip(str2, str2[1:]) :    
+		temp = i + j
+		if temp.isalpha() : 
+            list2.append(temp.upper())
+            
+	if len(list1) > len(list2) :
+		inter = [list1.remove(x) for x in list2 if x in list1] 
+	else :
+		inter = [list2.remove(x) for x in list1 if x in list2] 
+
+	mom = list1 + list2
+	len_mom = len(mom)
+	
+	if len_mom == 0 :
+		return 65536
+    
+	return int(len(inter)/len_mom * 65536 )
 ```
-copy here
-```
+
+</details>    
+    
 정영
 <details markdown="1">
 <summary>접기/펼치기 버튼</summary>
