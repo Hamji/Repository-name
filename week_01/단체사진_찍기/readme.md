@@ -1,7 +1,45 @@
 건희
+<details markdown="1">
+<summary>접기/펼치기</summary>
+
+```c++
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int solution(int n, vector<string> data) {
+    int answer = 0;
+    // 문자열 기본 세팅
+    string name = "ACFJMNRT";
+    do{
+        int count = 0;
+        // 조건 
+        for (int i = 0; i < n; i++){
+            char first_person = data[i][0];
+            char second_person = data[i][2];
+            char sign = data[i][3];
+            int gap = data[i][4] - '0';
+            int real_gap = name.find(first_person) - name.find(second_person);
+            real_gap = real_gap > 0 ? real_gap : -real_gap;
+            real_gap--;
+            
+            // 해당 조건에 맞지 않다면 순열 컷해버리기 
+            if (sign == '=' && real_gap != gap) break;
+            else if (sign == '>' && real_gap <= gap) break;
+            else if (sign == '<' && real_gap >= gap) break;
+            count++;
+        }
+        // 조건이 다 맞았다면 count == n 일것이고 아니면 안맞는거니까 answer를 증가시키지 않는다.
+        if (count == n) answer++;
+    }while(next_permutation(name.begin(), name.end()));
+    // 순열을 돌면서 조건들 확인
+    return answer;
+}
 ```
-copy here
-```
+
+</details>
+
 정영
 <details markdown="1">
 <summary>접기/펼치기</summary>
