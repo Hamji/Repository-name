@@ -172,7 +172,8 @@ def solution(str1, str2):
 문교
 <details>
 <summary>접기/펼치기 버튼</summary>
-```c++
+
+``` c++
 
 int solution(string str1, string str2) 
 {
