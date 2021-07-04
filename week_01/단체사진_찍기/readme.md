@@ -228,6 +228,14 @@ int solution(int n, vector<string> data) {
 
 ``` c++
 
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <vector>
+#include <map>
+
+using namespace std;
+
 	int answer = 0;
 
 	map<char, int> posMap;
