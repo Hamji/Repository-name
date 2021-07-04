@@ -222,6 +222,70 @@ int solution(int n, vector<string> data) {
 </details>
 
 문교
+
+<details markdown="1">
+<summary>접기/펼치기</summary>
+
 ```
-copy here
+
+	int answer = 0;
+
+	map<char, int> posMap;
+	vector<char> people = { 'A', 'C', 'F', 'J', 'M', 'N', 'R', 'T' };
+
+	do {
+		for (int i = 0; i < (int)people.size(); ++i)
+		{
+			posMap[people[i]] = i;
+		}
+
+		bool bisSatisfied = true;
+
+		for (string& s : data)
+		{
+			char src = s[0];
+			char dest = s[2];
+
+			int srcPos = posMap[src];
+			int destPos = posMap[dest];
+
+			int diffStep = abs(destPos - srcPos) - 1;
+
+			int operValue = s[4] - '0';
+
+			switch (s[3])
+			{
+			case '=':
+			{
+				bisSatisfied = diffStep == 0;
+			} break;
+
+			case '<':
+			{
+				bisSatisfied = diffStep < operValue;
+			} break;
+
+			case '>':
+			{
+				bisSatisfied = diffStep > operValue;
+			} break;
+			default:
+				cout << "?????" << endl;
+			}
+
+			if (!bisSatisfied)
+				break;
+		}
+
+		if (bisSatisfied)
+		{
+			++answer;
+		}
+
+	} while (next_permutation(people.begin(), people.end()));
+
+	return answer;
+    
 ```
+
+</details>
