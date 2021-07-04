@@ -170,6 +170,103 @@ def solution(str1, str2):
 </details>
   
 문교
+<details>
+<summary>접기/펼치기 버튼</summary>
 ```
-copy here
+
+int solution(string str1, string str2) 
+{
+	int answer = 0;
+
+	map<string, int> str1ClusterMap;
+	map<string, int> str2ClusterMap;
+
+	int str1ClusterNum = 0;
+	int str2ClusterNum = 0;
+
+	const int clusterLength = 2;
+
+	for (int i = 0; i <= (int)str1.size() - clusterLength; ++i)
+	{
+		string cluster;
+
+		for (int j = i; j < i + clusterLength; ++j)
+		{
+			char c = str1[j];
+			if ((c >= 'a' && c <= 'z'))
+			{
+				cluster += c;
+			}
+			else if ((c >= 'A' && c <= 'Z'))
+			{
+				cluster += c - 'A' + 'a';
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		if (cluster.size() == clusterLength)
+		{
+			str1ClusterMap[cluster]++;
+			str1ClusterNum++;
+		}
+	}
+
+	for (int i = 0; i <= (int)str2.size() - clusterLength; ++i)
+	{
+		string cluster;
+
+		for (int j = i; j < i + clusterLength; ++j)
+		{
+			char c = str2[j];
+			if ((c >= 'a' && c <= 'z'))
+			{
+				cluster += c;
+			}
+			else if ((c >= 'A' && c <= 'Z'))
+			{
+				cluster += c - 'A' + 'a';
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		if (cluster.size() == clusterLength)
+		{
+			str2ClusterMap[cluster]++;
+			str2ClusterNum++;
+		}
+	}
+
+	// 교집합
+	int intersectionNum = 0;
+
+	for (auto it = str1ClusterMap.begin(); it != str1ClusterMap.end(); it++)
+	{
+		auto it2 = str2ClusterMap.find(it->first);
+
+		if (it2 != str2ClusterMap.end())
+		{
+			intersectionNum += min(it->second, it2->second);
+		}
+	}
+
+	// 합집합
+	const int unionNum = str1ClusterNum + str2ClusterNum - intersectionNum;
+
+	if (unionNum == 0)
+	{
+		return 65536;
+	}
+
+	// 자카드 유사도
+	float similarity = (float)intersectionNum / unionNum;
+
+	return (int)(similarity * 65536);
+}
 ```
+</details>
