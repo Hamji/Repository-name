@@ -226,7 +226,7 @@ int solution(int n, vector<string> data) {
 <details markdown="1">
 <summary>접기/펼치기</summary>
 
-```
+``` c++
 
 	int answer = 0;
 
