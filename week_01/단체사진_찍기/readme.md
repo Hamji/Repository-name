@@ -173,9 +173,54 @@ int solution(int n, vector<string> data) {
 </details>
 
 건률
+<details markdown="1">
+<summary>접기/펼치기</summary>
+
+```c++
+#include <string>
+#include <algorithm>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+bool checkCondition(vector<char>& data, vector<string>& condition){
+    for(auto it = condition.begin(); it != condition.end(); it++){
+        int start = find(data.begin(), data.end(), (*it)[0]) - data.begin();
+        int end = find(data.begin(), data.end(), (*it)[2]) - data.begin();
+        
+        if((*it)[3] == '='){
+            if(!(abs(start-end) == ((*it)[4] - '0' + 1))) return false;
+        }
+        else if((*it)[3] == '>'){
+            if(!(abs(start-end) > ((*it)[4] - '0' + 1))) return false;
+        }
+        else if((*it)[3] == '<'){
+            if(!(abs(start-end) < ((*it)[4] - '0' + 1))) return false;
+        }
+        
+    }
+    
+    return true;
+}
+
+int solution(int n, vector<string> data) {
+    int answer = 0;
+    
+    vector<char> v = {'A','C','F','J','M','N','R','T'};
+    
+    
+    do {
+        if(checkCondition(v,data))
+            answer++;
+    } while (next_permutation(v.begin(), v.end()));
+
+    return answer;
+}
 ```
-copy here
-```
+
+</details>
+
 문교
 ```
 copy here
