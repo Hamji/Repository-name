@@ -172,7 +172,7 @@ def solution(str1, str2):
 문교
 <details>
 <summary>접기/펼치기 버튼</summary>
-```
+```c++
 
 int solution(string str1, string str2) 
 {
@@ -269,4 +269,5 @@ int solution(string str1, string str2)
 	return (int)(similarity * 65536);
 }
 ```
+	
 </details>
