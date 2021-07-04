@@ -268,7 +268,7 @@ int solution(int n, vector<string> data) {
 			{
 			case '=':
 			{
-				bisSatisfied = diffStep == 0;
+				bisSatisfied = diffStep == operValue;
 			} break;
 
 			case '<':
@@ -280,9 +280,6 @@ int solution(int n, vector<string> data) {
 			{
 				bisSatisfied = diffStep > operValue;
 			} break;
-			default:
-				cout << "?????" << endl;
-			}
 
 			if (!bisSatisfied)
 				break;
