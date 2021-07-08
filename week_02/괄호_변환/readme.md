@@ -10,6 +10,10 @@
 
 <details>
 <summary>접기/펼치기 버튼</summary>
+<br>
+최장시간 
+  
+  테스트 19 〉	통과 (0.11ms, 3.97MB)
 
 ``` cpp
 
@@ -54,7 +58,7 @@ string recursive(string s) {
         u.erase(u.length()-1, 1);
         for(int i = 0; i < u.length(); i++) {
             if(u[i] == ')') u[i] = '(';
-            else u[i]u = ')';
+            else u[i] = ')';
         }
         // u = reverse(u);
         return sub + u;
