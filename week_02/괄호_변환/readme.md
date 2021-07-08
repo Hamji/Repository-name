@@ -11,6 +11,62 @@
 <details>
 <summary>접기/펼치기 버튼</summary>
 
+``` cpp
+
+// 22:20 ~ 22:40 + 17:40 ~ 18:00
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+bool is_correct(string s) {
+    int balance = 0;
+    for(int i = 0; i < s.length(); i++) {
+        if(s[i] == '(') balance++;
+        else balance--;
+        if(balance < 0) return false;
+    }
+    return true;    
+}
+
+string recursive(string s) {
+    if(s.length() == 0) return "";
+    
+    int balance = 0;
+    string u, v;
+    for(int i = 0; i < s.length(); i++) {
+        if(s[i] == '(') balance++;
+        else balance--;
+        if(balance == 0) {
+            u = s.substr(0, i+1);
+            v = s.substr(i+1, s.length() - i);
+            break;
+        }
+    }
+    
+    if(is_correct(u)) {
+        return u + recursive(v);
+    } else {
+        string sub = "(";
+        sub += recursive(v);
+        sub += ")";
+        u.erase(0, 1);
+        u.erase(u.length()-1, 1);
+        for(int i = 0; i < u.length(); i++) {
+            if(u[i] == ')') u[i] = '(';
+            else u[i]u = ')';
+        }
+        // u = reverse(u);
+        return sub + u;
+    }
+}
+
+string solution(string p) {
+    p = recursive(p);
+    return p;
+}
+
+```
 
 </details>    
 
