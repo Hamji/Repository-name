@@ -3,6 +3,58 @@
 <details>
 <summary>접기/펼치기 버튼</summary>
 
+``` python
+
+  ### 
+  ###	통과 (0.44ms, 10.3MB)
+  ### 시간 : 30분 (문제이해하는데 소비) + 1시간 = 1
+  # u가 제대로 된놈인지 보는 함수
+def is_validate(u):
+    count = 0
+    
+    # 음수가 나온다면 올바르지 않은 상황이니까 break return
+    for i in u:
+        add = 1 if i == '(' else -1
+        count += add
+        if (count < 0):
+            return False
+    
+    # )가 더많은경우 
+    return count == 0
+
+def solution(p):
+    answer = ''
+    if p == "":
+        return p
+    count = 0
+    u = ""
+    v = ""
+    
+    #u, v 분리하기 밸런스가 맞다면 break 
+    for i in range(len(p)):
+        if p[i] == '(':
+            count += 1
+        else:
+            count -= 1
+        if count == 0:
+            u = p[0:i+1]
+            v = p[i+1:]
+            break;
+    
+    #valid 하다면 u 뒤에 v 붙이고 끝낸다 v 는 다시 재귀적으로 solution
+    if is_validate(u) == True:
+        return u + solution(v)
+    
+    #그게 아니라면 v 앞두로 괄호 붙이고
+    answer = '(' + solution(v) + ')'
+    # [1 : -1]뒤집어주기
+    for i in range(1,len(u)-1):
+        add = '(' if u[i] == ')' else ')'
+        answer += add
+    
+    return answer
+
+```
 
 </details>    
 
