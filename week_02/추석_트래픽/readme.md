@@ -8,8 +8,69 @@
 정영
 <details>
 <summary>접기/펼치기 버튼</summary>
+// 09:45 ~ 10:00 + 13:30 ~ 14:00 + 08:30 ~ 09:00 + 11:00 ~ 13:00
 
+테스트 18 〉 통과 (3.67ms, 4.19MB)
 	
+``` cpp
+#include <string>
+#include <vector>
+#include <algorithm>
+
+#define SEC_ITV 1000
+#define MIN_ITV (1000 * 60)
+#define HOR_ITV (1000 * 60 * 60)
+#define TRAFFIC_TERM 1000
+
+using namespace std;
+
+int parse_time(string time) {
+    string hh = time.substr(0, 2);
+    string mm = time.substr(3, 2);
+    string ss = time.substr(6, 2);
+    string nn = time.substr(9, 3);
+    return stoi(hh)*HOR_ITV + stoi(mm)*MIN_ITV + stoi(ss)*SEC_ITV + stoi(nn);
+}
+int parse_term(string term) {
+    string ss = term.substr(0, 1);
+    string nn = term.length() > 2 ? term.substr(2, term.length()-1) : "0";
+    
+    static const int nitv[5] = { 1, 10, 100 , -1, 1};
+    return stoi(ss)*SEC_ITV + stoi(nn) * nitv[6 - term.length()];
+}
+int solution(vector<string> lines) {
+    vector<pair<int, int>> times;
+    for(auto it = lines.begin(); it != lines.end(); ++it) {
+    // get time
+        string time = it->substr(11, 12);
+        string term = it->substr(24, it->length());
+    // get point
+        int itime = parse_time(time);
+        int iterm = parse_term(term);
+        times.push_back({max(itime - iterm + 1, 0), +1});
+        times.push_back({itime, -1});
+    }
+    sort(times.begin(), times.end());
+    // get max
+    int max_traffic = 0, bef_traffic = 0;
+    for(auto event = times.begin(); event != times.end(); ++event) {
+        // add before traffic
+        int traffic = bef_traffic;
+        // add after traffic
+        for(auto it = event;
+            it != times.end() && it->first < event->first + TRAFFIC_TERM; ++it) {
+            if(it->second == +1) traffic++;
+        }
+        // calc max
+        max_traffic = max(max_traffic, traffic);
+        // calc bef
+        bef_traffic += event->second; // +1 or -1
+    }
+    
+    return max_traffic;
+}
+```
+
 </details>
     
 건률
