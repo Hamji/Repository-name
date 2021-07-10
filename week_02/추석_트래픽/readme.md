@@ -8,11 +8,11 @@
 정영
 <details>
 <summary>접기/펼치기 버튼</summary>
-// 09:45 ~ 10:00 + 13:30 ~ 14:00 + 08:30 ~ 09:00 + 11:00 ~ 13:00
 
 테스트 18 〉 통과 (3.67ms, 4.19MB)
 	
 ``` cpp
+// 09:45 ~ 10:00 + 13:30 ~ 14:00 + 08:30 ~ 09:00 + 11:00 ~ 13:00
 #include <string>
 #include <vector>
 #include <algorithm>
