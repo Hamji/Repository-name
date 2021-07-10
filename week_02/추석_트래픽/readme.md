@@ -2,6 +2,46 @@
 <details>
 <summary>접기/펼치기 버튼</summary>
 
+``` python
+
+ # 	최대 (677.29ms, 10.5MB)
+def count_traffic(time, li):
+    result = 0
+    start = time
+    end = time + 1000
+    for i in li:
+        if i[1] >= start and i[0] < end:
+            result += 1
+    return result
+
+def solution(lines):
+    answer = 1
+    sliced_lines = []
+    
+    # 문자열 자르기 
+    for i in lines:
+        year, hour, process = i.split()
+        hour = hour.split(':')
+        process = float(process[:-1]) * 1000
+        end = (int(hour[0]) * 3600000 + int(hour[1]) * 60000 + int(float(hour[2])*1000))
+        start = end - process + 1
+        sliced_lines.append([start, end])
+    # * 1000 씩해줘서 다 ms 로 바꿔주고 더해주었다.    
+    
+    # 모든 리스트를 돌면서 (n) 다른 리스트가 시작초로부터 1초 후
+    # 끝나는 초로부터 1초 후 사이에 들어가 있는지 확인 (n-1)
+    # 그중에서 가장 큰거
+    # 2 * N * (N-1)
+    # ms 단위로 했다간 너무 커진다.
+    # 그림 보면 어차피 시작 초나 끝초에서 1초사이에 변화가 왓다갓다한다
+    for i in sliced_lines:
+        answer = max(answer, 
+                     count_traffic(i[0], sliced_lines),
+                     count_traffic(i[1], sliced_lines))
+
+    return answer
+	
+``` 
 	
 </details>
     
