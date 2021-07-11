@@ -190,6 +190,88 @@ def solution(p):
 
 <details>
 <summary>접기/펼치기 버튼</summary>
+  
+<br>
+최장시간 : 테스트 19 〉	통과 (0.09ms, 3.71MB)
 
+<br>
+문제 풀이 시간 : 45분 (문제 이해 15분 + 풀이 30분)
+  
+``` cpp
+  
+#include <string>
+#include <vector>
 
+using namespace std;
+
+// 균형잡힌 문자열인지
+bool isBalanced(string& p)
+{
+    int balance = 0;
+
+    for (int i = 0; i < p.size(); ++i)
+    {
+        if (p[i] == '(')
+            ++balance;
+        else
+        {
+            --balance;
+
+            if (balance < 0)
+                return false;
+        }
+    }
+    return true;
+}
+
+// 괄호 교정
+string correctString(string& s)
+{
+    if (s.size() < 2) return "";
+
+    // 양 끝 문자 제거
+    string ret = s.substr(1, s.size() - 2);
+    for (char& c : ret)
+    {
+        c = (c == '(') ? ')' : '(';
+    }
+    return ret;
+}
+
+string solution(string p) {
+    if (p.empty()) return p;
+
+    string u, v;
+    int balance = 0;
+
+    // u,v 분리
+    for (int i = 0; i < p.size(); ++i)
+    {
+        if (p[i] == '(')
+            ++balance;
+        else
+            --balance;
+
+        if (balance == 0)
+        {
+            u = p.substr(0, i + 1);
+            v = p.substr(i + 1);
+            break;
+        }
+    }
+
+    if (isBalanced(u))
+    {
+        return u + solution(v);
+    }
+    else
+    {
+        return '(' + solution(v) + ')' + correctString(u);
+    }
+    
+    return "";
+}
+
+```
+  
 </details>    
