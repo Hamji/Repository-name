@@ -163,6 +163,89 @@ def solution(lines):
 문교
 <details>
 <summary>접기/펼치기 버튼</summary>
+	
+<br>
+최장 시간 : 테스트 18 〉통과 (0.94ms, 4.15MB)
 
+<br>
+문제 풀이 시간 : 1시간 15분 (문제 이해 25분 + 풀이 55분)
+	
+``` cpp
+	
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+bool logCompare(const pair<int, int>& a, const pair<int, int>& b)
+{
+    // 시간 오름차순  
+    if (a.first != b.first)
+    {
+        return a.first < b.first;
+    }
+    // 시작 시간이 앞으로 가게
+    return a.second > b.second;
+}
+
+int solution(vector<string> lines) 
+{
+    int answer = 0;
+
+    // 시간, 상태 (1 == 시작, -1 == 완료)
+    vector<pair<int, int>> logs;
+
+    const int msPerHour = 60 * 60 * 1000;
+    const int msPerMin = 60 * 1000;
+    const int msPerSec = 1000;
+        
+    for (int i = 0; i < lines.size(); ++i)
+    {
+        string& line = lines[i];
+
+        int endTime = 0;
+
+        const int h = stoi(line.substr(11, 2));
+        const int m = stoi(line.substr(14, 2));
+        const int s = stoi(line.substr(17, 2));
+        const int ms = stoi(line.substr(20, 3));
+
+        endTime =
+            h * msPerHour +
+            m * msPerMin +
+            s * msPerSec +
+            ms;
+
+        string termStr = line.substr(24);
+        float termSec = stof(termStr.substr(0, termStr.size() - 1));
+        int termMs = termSec * 1000;
+	
+	// 시작 시간
+        logs.push_back({ endTime - termMs + 1, 1 });
+	// 완료 시간 + 1s (미리 더해준다)
+        logs.push_back({ endTime + 1000 - 1, -1 });
+    }
+
+    sort(logs.begin(), logs.end(), logCompare);
+
+    int maxTraffic = 0;
+    
+    for (int i = 0; i < logs.size(); ++i)
+    {
+        // 시작이면 +1, 완료면 -1
+        if (logs[i].second == 1)
+            ++maxTraffic;
+        else
+            --maxTraffic;
+
+        answer = max(maxTraffic, answer);
+    }
+
+    return answer;
+}
+		
+	
+```
 	
 </details>
