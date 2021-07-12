@@ -1,5 +1,5 @@
 
-<a href = 'https://programmers.co.kr/learn/courses/30/lessons/72414'> 프렌즈4블록 </a>
+<a href = 'https://programmers.co.kr/learn/courses/30/lessons/72414'> 광고 삽입 </a>
 
 
 건희
