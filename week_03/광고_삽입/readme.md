@@ -104,6 +104,122 @@ def solution(play_time, adv_time, logs):
 문교
 <details>
 <summary>접기/펼치기 버튼</summary>
+그냥 실패
 	
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+const int msPerHour = 60 * 60;
+const int msPerMin = 60;
+
+int parseTimeSeconds(const string& time)
+{
+    const int h = stoi(time.substr(0, 2));
+    const int m = stoi(time.substr(3, 2));
+    const int s = stoi(time.substr(6, 2));
+
+    return h * msPerHour + m * msPerMin + s;
+}
+
+string zero_padding(string num) {
+    return num.length() == 1 ? '0' + num : num;
+}
+
+string convertTimeStamp(int seconds)
+{
+    string hh = zero_padding(to_string(seconds / msPerHour));
+    string mm = zero_padding(to_string(seconds % msPerHour / msPerMin));
+    string ss = zero_padding(to_string(seconds % msPerMin));
+
+    return hh + ":" + mm + ":" + ss;
+}
+
+bool logCompare(const pair<int, int>& a, const pair<int, int>& b)
+{
+    // 시간 오름차순  
+    if (a.first != b.first)
+    {
+        return a.first < b.first;
+    }
+    // 시작 시간이 앞으로 가게
+    return a.second > b.second;
+}
+
+string solution(string play_time, string adv_time, vector<string> logs)
+{
+    int answer = 0;
+
+    int playTime = parseTimeSeconds(play_time);
+    int advTime = parseTimeSeconds(adv_time);
+
+    // 시간, 상태 (1 == 시작, -1 == 완료)
+    vector<pair<int, int>> sortedLogs;
+    // Key : 시작시간, Value : 누적시간
+    vector<pair<int, int>> accumLogs;
+
+    sortedLogs.push_back({ 0, 1 });
+    sortedLogs.push_back({ playTime, -1 });
+
+    for (int i = 0; i < logs.size(); ++i)
+    {
+        string& line = logs[i];
+
+        int startTime = parseTimeSeconds(line.substr(0, 8));
+        int endTime = parseTimeSeconds(line.substr(9, 8));
+
+        sortedLogs.push_back({ startTime, 1 });
+        sortedLogs.push_back({ endTime, -1 });
+    }
+
+    sort(sortedLogs.begin(), sortedLogs.end(), logCompare);
+
+    int prevTime = 0;
+    int viewer = 0;
+
+    for (int i = 0; i < sortedLogs.size(); ++i)
+    {
+        int curTime = sortedLogs[i].first;
+        int stepTime = curTime - prevTime;
+
+        for (int i = 0; i < accumLogs.size(); ++i)
+        {
+            int startTime = accumLogs[i].first;
+            int progressTime = startTime + advTime - prevTime;
+
+            if (progressTime > 0)
+            {
+                accumLogs[i].second += viewer * min(stepTime, progressTime);
+            }
+        }
+
+        // 시작이면 +1, 완료면 -1
+        if (sortedLogs[i].second == 1)
+        {
+            ++viewer;
+        }
+        else
+        {
+            --viewer;
+        }
+
+        accumLogs.push_back({ curTime, 0 });
+
+        prevTime = curTime;
+    }
+
+    pair<int, int> advLog = { 0, 0 };
+    for (int i = 0; i < accumLogs.size(); ++i)
+    {
+        if (advLog.second < accumLogs[i].second)
+        {
+            advLog = accumLogs[i];
+        }
+    }
+
+    return convertTimeStamp(advLog.first);
+}
 	
 </details>
