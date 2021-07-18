@@ -6,6 +6,46 @@
 <details>
 <summary>접기/펼치기 버튼</summary>
 
+``` python
+
+def solution(m, n, board):
+    answer = 0
+    for i in range(len(board)):
+        board[i] = list(board[i])
+    
+    while True:
+        remove = [[0]*n for _ in range(m)]
+        for i in range(m - 1):
+            for j in range(n - 1):
+                if board[i][j] != 0 and board[i][j] == board[i][j + 1] and board[i][j] == board[i + 1][j] and board[i][j] == board[i + 1][j + 1]:
+                    remove[i][j] = 1
+                    remove[i][j + 1] = 1
+                    remove[i + 1][j] = 1
+                    remove[i + 1][j + 1] = 1
+        count = 0
+        for i in range(m): 
+            count += sum(remove[i])
+        answer += count
+        if count == 0: 
+            break
+        # 지워진 블록 채우기
+        for i in range(m - 1, -1, -1):
+            for j in range(n):
+                if remove[i][j] == 1:
+                    x = i - 1
+                    # x 올리기 remove 가 1이 아닐때까지 쭈우욱 올라간다.
+                    while x >= 0 and remove[x][j] == 1: 
+                        x -= 1
+                    ## 만약 0보다 작다면위에 아무것도 없으니까 그냥 0으로 바꿔버린다.
+                    if x < 0:
+                        board[i][j] = 0
+                    else:
+                        board[i][j] = board[x][j]
+                        remove[x][j] = 1
+
+    return answer
+	
+```
 	
 </details>
     
