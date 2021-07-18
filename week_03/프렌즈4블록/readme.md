@@ -53,6 +53,7 @@ def solution(m, n, board):
 <details>
 <summary>접기/펼치기 버튼</summary>
 
+테스트 5 〉	통과 (2.48ms, 3.95MB)
 ``` c++
 #include <string>
 #include <vector>
