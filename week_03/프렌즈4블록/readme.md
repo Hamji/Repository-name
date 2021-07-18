@@ -6,6 +6,8 @@
 <details>
 <summary>접기/펼치기 버튼</summary>
 
+통과 (35.76ms, 10.3MB)
+	
 ``` python
 
 def solution(m, n, board):
