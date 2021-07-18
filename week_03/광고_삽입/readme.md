@@ -106,6 +106,7 @@ def solution(play_time, adv_time, logs):
 <summary>접기/펼치기 버튼</summary>
 그냥 실패
 	
+``` cpp
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -221,5 +222,7 @@ string solution(string play_time, string adv_time, vector<string> logs)
 
     return convertTimeStamp(advLog.first);
 }
-	
+
+```
+
 </details>
