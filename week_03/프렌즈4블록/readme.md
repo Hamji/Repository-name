@@ -52,7 +52,73 @@ def solution(m, n, board):
 정영
 <details>
 <summary>접기/펼치기 버튼</summary>
+#include <string>
+#include <vector>
+#include <queue>
 
+using namespace std;
+
+vector<vector<int>> is_block;
+
+bool check_block(int m, int n, vector<string> board) {
+    bool has_change = false;
+    for(int i = 0; i < m-1; i++) {
+        for(int j = 0; j < n-1; j++) {
+            if(board[i][j] != 'X' &&
+              board[i][j] == board[i][j+1] &&
+              board[i][j] == board[i+1][j] &&
+              board[i][j] == board[i+1][j+1] ) {
+                if(is_block[i][j] == 0) {
+                    has_change = true;
+                }
+                is_block[i][j] = 1;
+                is_block[i][j+1] = 1;
+                is_block[i+1][j] = 1;
+                is_block[i+1][j+1] = 1;
+            }
+        }
+    }
+    return has_change;
+}
+void block_down(int m, int l, vector<string> &board) {
+    queue<pair<char, int>> q;
+    for(int i = m-1; i >= 0; i--) {
+        if(is_block[i][l] == 0) {
+            q.push({board[i][l], 0});
+        }
+    }
+    for(int i = m-1; i >= 0; i--) {
+        if(is_block[i][l] == 1) {
+            q.push({'X', 1});
+        }
+    }
+    for(int i = m-1; i >= 0; i--) {
+        board[i][l] = q.front().first;
+        is_block[i][l] = q.front().second;
+        q.pop();
+    }
+}
+
+int solution(int m, int n, vector<string> board) {
+    int answer = 0;
+    is_block = vector<vector<int>>(m, vector<int>(n, 0));
+    
+    // check block
+    while(check_block(m, n, board)) {
+        // push down
+        for(int line = 0; line < n; line++) {
+            block_down(m, line, board);
+        }
+    }
+    // count
+    for(int i = 0; i < m; i++) {
+        for(int j = 0; j < n; j++) {
+            answer += is_block[i][j];
+        }
+    }
+    
+    return answer;
+}
 
 </details>
     
