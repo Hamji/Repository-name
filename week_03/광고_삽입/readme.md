@@ -179,6 +179,8 @@ string solution(string play_time, string adv_time, vector<string> logs)
 
     int prevTime = 0;
     int viewer = 0;
+    
+    pair<int, int> advLog = { 0, 0 };
 
     for (int i = 0; i < sortedLogs.size(); ++i)
     {
@@ -193,6 +195,11 @@ string solution(string play_time, string adv_time, vector<string> logs)
             if (progressTime > 0)
             {
                 accumLogs[i].second += viewer * min(stepTime, progressTime);
+                
+                if (advLog.second < accumLogs[i].second)
+                {
+                    advLog = accumLogs[i];
+                }
             }
         }
 
@@ -200,27 +207,19 @@ string solution(string play_time, string adv_time, vector<string> logs)
         if (sortedLogs[i].second == 1)
         {
             ++viewer;
+            
+            accumLogs.push_back({ curTime, 0 });
         }
         else
         {
             --viewer;
         }
 
-        accumLogs.push_back({ curTime, 0 });
-
         prevTime = curTime;
     }
 
-    pair<int, int> advLog = { 0, 0 };
-    for (int i = 0; i < accumLogs.size(); ++i)
-    {
-        if (advLog.second < accumLogs[i].second)
-        {
-            advLog = accumLogs[i];
-        }
-    }
-
     return convertTimeStamp(advLog.first);
+}
 }
 
 ```
