@@ -52,7 +52,8 @@ def solution(m, n, board):
 정영
 <details>
 <summary>접기/펼치기 버튼</summary>
-	
+
+``` c++
 #include <string>
 #include <vector>
 #include <queue>
@@ -120,6 +121,8 @@ int solution(int m, int n, vector<string> board) {
     
     return answer;
 }
+```
+			    
 
 </details>
     
