@@ -99,6 +99,92 @@ def solution(m, n, board):
 문교
 <details>
 <summary>접기/펼치기 버튼</summary>
+
+테스트 5 〉	통과 (2.40ms, 3.77MB)
 	
+``` cpp
+	
+#include <string>
+#include <vector>
+
+using namespace std;
+
+bool canClear(int m, int n, vector<string>& board)
+{
+    char c = board[m][n];
+    
+    return c == board[m][n + 1]
+        && c == board[m + 1][n]
+        && c == board[m + 1][n + 1];
+}
+
+int solution(int m, int n, vector<string> board) {
+    int answer = 0;
+
+    while (true)
+    {
+        vector<vector<bool>> clearFlags(m, vector<bool>(n, false));
+
+        bool finishFlag = true;
+
+        for (int i = 0; i < m - 1; ++i)
+        {
+            for (int j = 0; j < n - 1; ++j)
+            {
+                if (board[i][j] == ' ' )
+                    continue;
+
+                if (canClear(i, j, board))
+                {
+                    clearFlags[i][j] = true;
+                    clearFlags[i][j + 1] = true;
+                    clearFlags[i + 1][j] = true;
+                    clearFlags[i + 1][j + 1] = true;
+
+                    finishFlag = false;
+                }
+            }
+        }
+
+        if (finishFlag)
+            break;
+
+        for (int i = 0; i < m; ++i)
+        {
+            for (int j = 0; j < n; ++j)
+            {
+                if (clearFlags[i][j] == true)
+                {
+                    board[i][j] = ' ';
+                    ++answer;
+                }
+            }
+        }
+
+        for (int i = m - 1; i >= 0; --i)
+        {
+            for (int j = n - 1; j >= 0; --j)
+            {
+                if (board[i][j] != ' ')
+                    continue;
+
+                for (int k = i - 1; k >= 0; k--) 
+                {
+                    if (board[k][j] != ' ') 
+                    {
+                        board[i][j] = board[k][j];
+                        board[k][j] = ' ';
+                        break;
+                    }
+                }
+            }
+        }
+
+    }
+
+    return answer;
+}
+	
+```
 	
 </details>
