@@ -1,5 +1,5 @@
 
-<a href = 'https://programmers.co.kr/learn/courses/30/lessons/'> 문제이름 </a>
+<a href = 'https://programmers.co.kr/learn/courses/30/lessons/1830'> 브라이언의 고민 </a>
 
 
 건희
