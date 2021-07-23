@@ -37,7 +37,21 @@ def solution(play_time, adv_time, logs):
         
     for i in range(1, len(total)):
         total[i] = total[i] + total[i - 1]
-## 누적 시간은 어케? 모르겟다 싯팔~
+    for i in range(1, len(total)):
+        total[i] = total[i] + total[i - 1]
+        
+    max_play = total[adv_time-1]
+    start = 0
+    
+    for i in range(adv_time, play_time):
+        play = total[i] - total[i - adv_time]
+        
+        if play > max_play:
+            max_play = play
+            start = i-adv_time + 1
+    
+    
+    return int_to_time(start)
 	
 ```
 	
