@@ -259,6 +259,133 @@ string solution(string sentence) {
 <details>
 <summary>접기/펼치기 버튼</summary>
   
+	
+``` cpp
+	
+테스트 1 〉	통과 (6.19ms, 4.15MB)
+	
+#include <string>
+#include <vector>
+#include <iostream>
+#include <set>
+
+using namespace std;
+
+set<char> dup;
+
+bool isUpper(char c){
+    if('A'<=c && c<='Z') return true;
+    return false;
+}
+bool isLower(char c){
+    if('a'<=c && c<='z') return true;
+    return false;
+}
+
+int check1(string str){
+    char myAlpha = str[1];
+    if(isUpper(str[0]) && isLower(str[1])){
+        //문장의 마지막 글자가 타겟으로한 소문자이면 조건1X
+        if(str.size() == str.rfind(myAlpha)+1) return -1;
+        int count = 0;
+        for(int i = 1; i<str.rfind(str[1])+1; i+=2){
+            if(str[i] != myAlpha) return -1;
+            count++;
+        }
+        //소문자가 2개만 존재할경우 조건 1/2 모두 가능하므로 이경우에는 조건2만 검사하기위해 조건1은 X인 것으로 취급
+        if(count == 2)return -1;
+        if(dup.find(myAlpha) != dup.end()) return -1;
+        return str.rfind(myAlpha);
+    }
+    return -1;
+    
+}
+int check2(string str){
+    if(isLower(str[0]) && isLower(str[1])) return -1;
+    if(isLower(str[0])){
+        if(str.find(str[0],1) != str.rfind(str[0])) return -1;
+        if(dup.find(str[0]) != dup.end()) return -1;
+        dup.insert(str[0]);
+        return str.find(str[0],1);
+    }
+    return -1;
+}
+
+// 전역 변수를 정의할 경우 함수 내에 초기화 코드를 꼭 작성해주세요.
+string solution(string sentence) {
+    string answer = "";
+    dup.clear();
+    vector<string> list;
+    
+    string temp = "";
+    for(;sentence.size() != 0;){
+        
+        //각각 조건1,2를 만족하는 마지막 소문자의 index를 return
+        int index1 = check1(sentence);
+        int index2 = check2(sentence);
+        
+        //조건 1또는 2를 만족하면 temp에 들어있던 단어는 완성된 단어로 취급
+        if(index2 != -1){
+            if(temp.size() != 0) {
+                list.push_back(temp);
+                temp = "";
+            }
+            //aBcBa 라면 BcB를 리스트에 저장
+            list.push_back(sentence.substr(1,index2-1));
+            sentence = sentence.substr(index2+1);
+        }else if(index1 != -1){
+            if(temp.size() != 0) {
+                list.push_back(temp);
+                temp = "";
+            }
+            //BcB 라면 BcB를 리스트에 저장
+            list.push_back(sentence.substr(0,index1+2));
+            sentence = sentence.substr(index1+2);
+        }else{
+            //조건1을 만족하지 않으면서 첫문자가 대문자면(연속된 대문자) 단어 이므로 임시저장
+            //조건2를 만족하지 않는데 첫문자가 소문자이면 올바르지 않는 조건
+            if(isUpper(sentence[0])){
+                temp += sentence[0];
+                sentence = sentence.substr(1);
+                continue;
+            }
+            
+            return "invalid";
+        }
+    }
+    
+    if(temp.size() != 0) list.push_back(temp);
+    //결과적으로 list에는 모두 대문자이거나 조건1을 만족하는 문자열만 들어있어야함
+    for(auto it = list.begin(); it != list.end(); it++){
+        //2번째문자가 소문자라면 조건1을 만족해야하므로 검사
+        char tempAlpha = (*it)[1];
+        if(isLower(tempAlpha)){
+            if(it->size() %2 == 0)return "invalid";
+            if(dup.find(tempAlpha) != dup.end()) return "invalid";
+            dup.insert(tempAlpha);
+            string tempStr = "";
+            for(int i = 0; i<it->size(); i+=2){
+                if(isLower((*it)[i])) return "invalid";
+                //조건 1 불만족
+                if(i+1 < it->size() && tempAlpha != (*it)[i+1]) return "invalid";
+                tempStr+=(*it)[i];
+            }
+            *it = tempStr;
+        }else{
+        //2번째문자가 소문자가 아니라면 모두 대문자여야하므로 검사
+            for(int i = 0; i<it->size(); i++){
+                if(isLower((*it)[i])) return "invalid";
+            }
+        }
+        if(it->size() == 0) return "invalid";
+        
+        answer += *it + " ";
+    }
+    answer = answer.substr(0,answer.size()-1);
+    if(answer == "") return "invalid";
+    return answer;
+}	
+```
 </details>
   
 문교
