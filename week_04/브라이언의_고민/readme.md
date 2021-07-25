@@ -245,6 +245,87 @@ string solution(string sentence) {
 <details>
 <summary>접기/펼치기 버튼</summary>
 
+``` cpp
+#include <string>
+
+using namespace std;
+
+bool isPattern(char c) {
+    return 'a' <= c && c <= 'z';
+}
+
+// 전역 변수를 정의할 경우 함수 내에 초기화 코드를 꼭 작성해주세요.
+string solution(string sentence) {
+    string answer = "";
+    // 특수문자 정리
+    for(int start = 0; start < sentence.length(); start++) {
+        // 첫 특수문자 발견
+        char s = sentence[start];
+        if(isPattern(s)) {
+            int end;
+            int count = 1;
+            
+            sentence.erase(start, 1);
+            if(isPattern(sentence[start])) return "invalid"; // 첫 글자 직후 패턴
+            
+            // 나머지 특수문자 정리
+            bool single_word = true;
+            for(int j = start+1; j < sentence.length(); j++) {
+                if(sentence[j] == s) {
+                    if(!single_word) return "invalid";  // 중간에 띄어쓰기
+                    if(count >= 2 && isPattern(sentence[j+1])) return "invalid";    // 규칙1 패턴뒤에 패턴글자
+                    count++;
+                    sentence.erase(j, 1);
+                    end = j;
+                    j--;
+                }
+                if(sentence[j] == ' ') {
+                    single_word = false;
+                }
+            }
+            
+            
+            // 공백 만들기
+            if(count == 1) {
+                return "invalid";
+            }
+            if(count == 2) {
+                if(start-2 >= 0 && end+1 < sentence.length() && sentence[start-2] == ' ' && sentence[end+1] == ' ') {
+                    
+                } else {
+                    sentence.insert(start, " ");
+                    sentence.insert(end+1, " ");
+                }
+            } else if(count > 2) {
+                if(sentence[start-1] == ' ') return "invalid";
+                if(start == 0 || end == sentence.length() ||
+                  sentence[start-1] == ' ' || sentence[end] == ' ') return "invalid";
+                if(end+1 < sentence.length()) {
+                    sentence.insert(start-1, " ");
+                    sentence.insert(end+2, " ");
+                }
+            }
+        }
+    }
+    
+    // 띄어쓰기 정리
+    for(int i = 0; i < sentence.length(); i++) {
+        if(sentence[i] == ' ') {
+            for(int j = i+1; j < sentence.length() && sentence[j] == ' '; j++) {
+                sentence.erase(j, 1);
+                j--;
+            }
+        }
+    }
+    if(sentence[0] == ' ') {
+        sentence.erase(0, 1);
+    }
+    if(sentence[sentence.length()-1] == ' ') {
+        sentence.erase(sentence.length()-1, 1);
+    }
+    return sentence;
+}
+```
 
 </details>
     
