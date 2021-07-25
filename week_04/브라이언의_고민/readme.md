@@ -203,15 +203,8 @@ string solution(string sentence) {
                         if (sentence[j] == char_1)
                             pos.push_back(j);
                     // OqA 인경우 O A 이니까 룰 1꺼줄 필용벗다
-                    if (pos.size() == 1)
+                    if (pos.size() == 1 || pos.size() > 2)
                         continue;
-                    // 다음에 나올 소문자가 3개 이상인 경우...\
-                    // AoAoAAAAoBB 인경우 1도아니고 2도아니긴한데 여기서 는 일단 rule 1로 봐주자구
-                    // 2개도 하나로 할경우 뭔가 복잡하다
-                    else if (pos.size() > 2)
-                    {
-                        continue;
-                    }
                     // 2개라면 룰2
                     else 
                     {
