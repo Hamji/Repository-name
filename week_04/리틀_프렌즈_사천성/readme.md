@@ -164,7 +164,186 @@ string solution(int m, int n, vector<string> board) {
 건률
 <details>
 <summary>접기/펼치기 버튼</summary>
-  
+
+	
+``` cpp
+	
+테스트 1 〉	통과 (95.55ms, 3.99MB)
+	
+#include <string>
+#include <vector>
+#include <map>
+#include <set>
+#include <iostream>
+
+using namespace std;
+map<char,bool> ableMap;
+set<char> impossibleSet;
+int maxY;
+int maxX;
+string result = "";
+
+
+void checkLine(int y1,int x1,int y2,int x2,vector<string> &board){
+    auto it = ableMap.find(board[y1][x1]);
+    if(it != ableMap.end() && it->second == false){
+        impossibleSet.insert(it->first);
+        ableMap.erase(it);
+        return;
+    }else 
+    if(it != ableMap.end() && it->second == true){
+        impossibleSet.erase(it->first);
+        return;
+    }
+    int diffX = x2-x1;
+    int diffY = y2-y1;
+    int tempY = 0;
+    int tempX = 0;
+    
+    int directX = diffX > 0 ? 1 : -1;
+    int directY = diffY > 0 ? 1 : -1;
+    
+    if(y1 == y2){
+        for(int i = x1; i != x2+directX; i+= directX){
+            if(board[y1][i] != '.' && board[y1][i] != board[y1][x1]) {
+                ableMap[board[y1][x1]] = false;
+                return;
+            }
+        }
+        ableMap[board[y1][x1]] = true;
+        return;
+        
+    }else if(x1 == x2){
+        for(int i = y1; i != y2+directY; i+= directY){
+            if(board[i][x1] != '.' && board[i][x1] != board[y1][x1]) {
+                ableMap[board[y1][x1]] = false;
+                return;
+            }
+        }
+        
+        ableMap[board[y1][x1]] = true;
+        return;
+    }else{
+        bool bre = false;
+        for(int i = x1; i != x2+directX; i+= directX){
+            if(board[y1][i] != '.' && board[y1][i] != board[y1][x1]) {
+                ableMap[board[y1][x1]] = false;
+                bre = true;
+                break;
+            }
+            tempX = i;
+        }
+        
+        for(int i = y1; i != y2+directY; i+= directY){
+            if(bre) break;
+            if(board[i][tempX] != '.' && board[i][tempX] != board[y1][x1]) {
+                ableMap[board[y1][x1]] = false;
+                break;
+            }
+            tempY = i;
+        }
+        if(tempX == x2 && tempY == y2){
+            ableMap[board[y1][x1]] = true;
+            return;
+        }
+        
+        
+        for(int i = y1; i != y2+directY; i+= directY){
+            if(board[i][x1] != '.' && board[i][x1] != board[y1][x1]) {
+                ableMap[board[y1][x1]] = false;
+                return;
+            }
+            tempY = i;
+        }
+        for(int i = x1; i != x2+directX; i+= directX){
+            if(board[tempY][i] != '.' && board[tempY][i] != board[y1][x1]) {
+                ableMap[board[y1][x1]] = false;
+                return;
+            }
+        }
+        
+        ableMap[board[y1][x1]] = true;
+        return;
+    }
+    
+}
+
+
+void findPair(int y,int x,vector<string> &board){
+    if(board[y][x] == '*' || board[y][x] == '.') return;
+    for(int i = 0; i<maxY; i++){
+        for(int j = 0; j<maxX; j++){
+            if(x == j && y == i) continue;
+            if(board[y][x] == board[i][j]){
+                checkLine(y,x,i,j,board);
+                return;
+            }
+            
+        }
+    }
+}
+
+bool mapChack(vector<string> &board){
+    //map은 기본적으로 key값이 정렬이 되어있기때문에 순차적으로 찾으면 알파벳 순서로 찾을 수 있음.
+    for(auto it = ableMap.begin(); it != ableMap.end(); it++){
+        //지울수 있는 블럭을 찾으면 해당 부분을 비우고 결과에 해당 알파벳 추가
+        if(it->second == true) {
+            for(int i = 0; i<maxY; i++){
+                for(int j = 0; j<maxX; j++){
+                    if(board[i][j] == it->first){
+                        board[i][j] = '.';
+                    }
+                }
+            }
+            result += it->first;
+            // cout<<it->first<<" ";
+            ableMap.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+void printMap(vector<string> &board){
+    for(auto it = ableMap.begin(); it!=ableMap.end(); it++){
+        cout<<it->first << " "<<it->second << endl; 
+    }
+    
+    for(int i = 0; i<maxY; i++){
+        for(int j = 0; j<maxX; j++){
+            cout<<board[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    cout<<endl;
+}
+
+// 전역 변수를 정의할 경우 함수 내에 초기화 코드를 꼭 작성해주세요.
+string solution(int m, int n, vector<string> board) {
+    maxY = m;
+    maxX = n;
+    ableMap.clear();
+    impossibleSet.clear();
+    result = "";
+
+    do{
+        for(int i = 0; i<m; i++){
+            for(int j = 0; j<n; j++){
+                //지울수 있는 블럭이 있는지 찾기
+                findPair(i,j,board);
+            }
+        }
+        // printMap(board);
+        //지울수 잇는 블럭이 있으면 하나 지우고 반복
+    }while(mapChack(board));
+    
+    //set에 요소가 남아있으면 짝이 안맞는 블럭이 존재한다는 뜻이므로 불가능
+    if(!impossibleSet.empty()) result = "IMPOSSIBLE";
+    // printMap(board);
+    return result;
+}
+```	
+	
+	
 </details>
   
 문교
