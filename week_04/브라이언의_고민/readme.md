@@ -6,6 +6,7 @@
 <details>
 <summary>접기/펼치기 버튼</summary>
 	
+테스트 1 〉	통과 (2.78ms, 4.2MB)
 ``` c++
 
 #include <string>
