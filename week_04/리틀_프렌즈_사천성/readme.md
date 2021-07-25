@@ -13,6 +13,8 @@
 <summary>접기/펼치기 버튼</summary>
 
 ``` cpp
+테스트 1 〉	통과 (20.81ms, 4.01MB)
+	
 #include <string>
 #include <vector>
 #include <algorithm>
