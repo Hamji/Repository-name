@@ -6,6 +6,44 @@
 <details>
 <summary>접기/펼치기 버튼</summary>
 	
+``` python
+
+from itertools import combinations
+
+def solution(relation):
+    row = len(relation)
+    col = len(relation[0])
+    
+    candi = []
+    # combination으로 키 경우의 수 만들어주기
+    for i in range(1, col+1):
+        candi.extend(combinations(range(col), i))
+    
+    # exclusive 가 유일성이래 알고 계셧나요?
+    exclu = []
+    for ks in candi:
+        temp = [tuple([item[k] for k in ks]) for item in relation]
+        #print(temp)
+        # 추출한 키값의 길이가 row 와 같다면 candidate 의 유일성 만족한다
+        if len(set(temp)) == row:
+            exclu.append(ks)
+    
+    # 최소성 검사
+    minim = set(exclu)
+    for i in range(len(exclu)):
+        for j in range(i + 1, len(exclu)):
+            if len(exclu[i]) == len(set(exclu[i]).intersection(set(exclu[j]))):
+                # print(exclu[i])
+                # print(exclu[j])
+                # print("---")
+                minim.discard(exclu[j])
+    
+    #print(minim)
+    return len(minim)
+	
+```
+	
+	
 </details>
     
 정영
