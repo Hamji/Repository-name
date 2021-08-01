@@ -49,8 +49,91 @@ def solution(relation):
 정영
 <details>
 <summary>접기/펼치기 버튼</summary>
+``` cpp
+테스트 20 〉	통과 (0.48ms, 3.84MB)
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
 
+using namespace std;
 
+bool is_inner_comb(vector<int> comb, vector<vector<int>> inner_combs) {
+    for(auto inner_comb : inner_combs) {
+        // inner_comb를 하나라도 가지고 있으면 실패
+        bool is_new = false;
+        for(auto c : inner_comb) {
+            // 모두 존재했던 거라면 큰일임
+            if(comb.end() == find(comb.begin(), comb.end(), c)) {
+                is_new = true;
+                break;
+            }
+        }
+        if(!is_new) {
+            return true;
+        }
+    }
+    return false;
+}
+
+int solution(vector<vector<string>> relation) {
+    int answer = 0;
+    int tuple_size = relation.size();
+    int attribute_size = relation[0].size();
+    vector<vector<int>> comb_vec;
+    vector<vector<int>> unique_comb;
+    map<string, int> m;
+
+    // 기본적으로는 모든 조합을 만든다. (ex 1개, 2개 ...)
+    for(int i = 1; i <= attribute_size; i++) {
+        // unique로 확인되지 않은 index를 가지고 조합을 만들어야 한다. (ex 2개 짜리 조합 01, 02, ...)
+        vector<bool> v(attribute_size - i, false);
+        v.insert(v.end(), i, true);
+        do {
+            vector<int> comb;
+            for(int k = 0; k < attribute_size; k++) {
+                if(v[k]) {
+                    comb.push_back(k);
+                }
+            }
+            if(!is_inner_comb(comb, unique_comb)) comb_vec.push_back(comb);  // 만들어낸 조합에 특정 조합이 없다면 추가
+        } while (next_permutation(v.begin(), v.end()));
+        if(comb_vec.size() == 0) break;                     // 조합이 만들어지지 않았으면 종료
+        
+        // 만들어낸 조합 전체를 확인
+        for(auto comb : comb_vec) {
+            bool isUnique = true;
+            
+            // tuple 마다 map에 추가함
+            for(int x = 0; x < tuple_size; x++) {
+                // 조합 index를 튜플의 string으로 변환
+                string temp = "";
+                for(auto y : comb) {
+                    temp += relation[x][y];
+                }
+                
+                // 해당 조합은 유니크하지 않음!
+                if(m[temp] != 0) {
+                    isUnique = false;
+                    break;
+                }
+
+                m[temp]++;
+            }
+            m.clear();
+            
+            // 해당 조합은 유니크함!
+            if(isUnique) {
+                answer++;
+                unique_comb.push_back(comb);
+            }
+        }
+        comb_vec.clear();
+    }
+    
+    return answer;
+}	
+```
 </details>
     
 건률
