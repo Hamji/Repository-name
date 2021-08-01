@@ -60,7 +60,121 @@ def solution(key, lock):
 <details>
 <summary>접기/펼치기 버튼</summary>
 
+``` cpp
+	
+#include <string>
+#include <vector>
 
+using namespace std;
+
+struct Box {
+    int minX;
+    int minY;
+    int maxX;
+    int maxY;
+    int sizeX;
+    int sizeY;
+};
+
+vector<vector<int>> board;  // lock
+vector<vector<int>> new_key;  // key 실공간
+
+Box getBox(vector<vector<int>> &board, int cond) {
+    int minX = 20, minY = 20;
+    int maxX = -1, maxY = -1;
+    for(int i = 0; i < board.size(); i++) {
+        for(int j = 0; j < board.size(); j++) {
+            if(board[i][j] == cond) {
+                minX = min(minX, i);
+                minY = min(minY, j);
+                maxX = max(maxX, i);
+                maxY = max(maxY, j);
+            }
+        }
+    }
+    int sizeX = maxX - minX + 1;    // 세로 길이
+    int sizeY = maxY - minY + 1;    // 가로 길이
+    return {minX, minY, maxX, maxY, sizeX, sizeY};
+}
+
+bool checker(int sx, int ex, int dx, int sy, int ey, int dy) {
+   for(int x = sx; x != ex; x = x + dx) {\
+       for(int y = sy; y != ey; y += dy) {
+           // printf("%d(%d) ", board[x][y], new_key[dx*(x - sx)][dy*(y - sy)]);
+           if(board[x][y] == new_key[dx*(x - sx)][dy*(y - sy)]) {
+               // printf("\n\n");
+               return false;
+           }
+       }
+       // printf("\n");
+    }
+    // printf("\n");
+    return true;
+}
+
+bool solution(vector<vector<int>> key, vector<vector<int>> lock) {
+    bool answer = true;
+    static int s = lock.size()-1;
+    board = lock;
+    // lock에서 홈 부분 공간을 구한다.
+    Box lockB = getBox(lock, 0);
+    Box keyB = getBox(key, 1);
+    // lock 공간이 key 보다 큰 지 체크(위로 옆으로 한번씩)
+    if( (keyB.sizeX < lockB.sizeX || keyB.sizeY < lockB.sizeY) && 
+        (keyB.sizeY < lockB.sizeX || keyB.sizeX < lockB.sizeY) ) {
+        printf("e");
+        return false;
+    }
+    
+    // 실제 사용될 key를 구한다.
+    new_key = vector<vector<int>>(keyB.sizeX, vector<int>(keyB.sizeY));
+    for(int i = keyB.minX; i <= keyB.maxX; i++) {
+        for(int j = keyB.minY; j <= keyB.maxY; j++) {
+            new_key[i - keyB.minX][j - keyB.minY] = key[i][j];
+        }
+    }
+    
+    // lock 공간이
+    if(lockB.minX > 0 && lockB.minY > 0 && 
+       lockB.maxX < s && lockB.maxY < s) { // 중심부에 있는 경우
+        // key가 lock 과 동일크기인지 체크
+        if( (keyB.sizeX != lockB.sizeX || keyB.sizeY != lockB.sizeY) && 
+            (keyB.sizeY != lockB.sizeX || keyB.sizeX != lockB.sizeY) ) {
+            printf("ms");
+            return false;
+        }
+        // 실제 확인, 정확하기 때문에 회전만 체크
+        if( checker(lockB.minX, lockB.maxX+1, +1, lockB.minY, lockB.maxY+1, +1) ||
+            checker(lockB.minY, lockB.maxY+1, +1, lockB.maxX, lockB.minX-1, -1) || 
+            checker(lockB.maxX, lockB.minX-1, -1, lockB.maxY, lockB.minY-1, -1) || 
+            checker(lockB.maxY, lockB.minY-1, -1, lockB.minX, lockB.maxX+1, +1) ){
+            printf("mm"); 
+            return true;
+        }
+        return false;
+    } else { // 외변, 모서리에 있는 경우
+        // 실제 확인, 양 변을 초과된 키의 여분만큼 확인해야함.
+        for(int cur_x = 0; keyB.sizeX - cur_x >= lockB.sizeX; cur_x++) {
+            for(int cur_y = 0; keyB.sizeY - cur_y >= lockB.sizeY; cur_y++) {
+                
+                for(int x = max(lockB.minX - cur_x, 0); x <= min(keyB.sizeX - cur_x, s); x++) {
+                    for(int y = max(lockB.minX - cur_y, 0); y <= min(keyB.sizeY - cur_y, s); y++) {
+                        printf("%d ", lock[x][y]);
+                    }
+                    printf("\n");
+                }
+                
+                printf("----\n");
+            }
+        }
+        printf("s");
+    }
+    
+    // return false;
+    return answer;
+}
+```
+	
 </details>
     
 건률
