@@ -20,8 +20,8 @@
 <summary>접기/펼치기 버튼</summary>
 	
 ``` python
-
-테스트 27 〉	통과 (222.02ms, 10.2MB)
+	
+테스트 27 〉	통과 (27.14ms, 10.3MB)
 
 N = None
 M = None
@@ -84,10 +84,10 @@ def solution(key, lock):
     empty = countEmpty(lock)
     
     for i in range(4):
-        #범위가 -M+1 부터 N+M-1 인이유
-        #key 의 위치가 lock 의 범위를 초과할 수 있기때문
-        for i in range(-M+1,N+M-1):
-            for j in range(-M+1,N+M-1):
+        #범위가 -M+1 부터 N 인이유
+        #key(0,0) 의 위치가 lock 의 범위를 초과할 수 있기때문
+        for i in range(-M+1,N):
+            for j in range(-M+1,N):
                 answer = fit(i,j,key,lock)
                 if answer == True:
                     return answer
