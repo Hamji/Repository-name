@@ -7,7 +7,9 @@
 <summary>접기/펼치기 버튼</summary>
 	
 ``` python
-
+{ % highlight python linenos % }
+code_contents
+{ % endhighlight % }
 # 90 도 시계방향 회전
 def rotate(key):
     result = [[0] * len(key) for i in range(len(key))] 
@@ -50,7 +52,9 @@ def solution(key, lock):
         key = rotate(key)
     
     return False
-	
+{ % highlight python linenos % }
+code_contents
+{ % endhighlight % }
 ```
 	
 	
