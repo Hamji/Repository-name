@@ -20,9 +20,3 @@
 <summary>접기/펼치기 버튼</summary>
   
 </details>
-  
-문교
-<details>
-<summary>접기/펼치기 버튼</summary>
-
-</details>
