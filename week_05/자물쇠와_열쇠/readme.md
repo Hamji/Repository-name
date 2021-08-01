@@ -6,6 +6,54 @@
 <details>
 <summary>접기/펼치기 버튼</summary>
 	
+``` python
+
+# 90 도 시계방향 회전
+def rotate(key):
+    result = [[0] * len(key) for i in range(len(key))] 
+    rev = len(key)
+    for i in range(len(key)):
+        for j in range(len(key)):
+            result [j][rev - 1 - i] = key[i][j]
+    
+    return result
+    
+def insert(key, lock, start_c, start_r, end):
+    leng = (2 * len(key)) + len(lock) - 2
+    key_len = len(key)
+    # 배경 행렬
+    back = [[0 for i in range(leng)] for j in range(leng)]
+    
+    # 배경에 key 넣기
+    for i in range(key_len):
+        for j in range(key_len):
+            back[start_c + i][start_r + j] = key[i][j]
+    
+    for i in range(key_len - 1, end):
+        for j in range(key_len - 1, end):
+            back[i][j] += lock[i - key_len + 1][j - key_len + 1]
+            if back[i][j] != 1:
+                return False
+    
+    return True
+    
+def solution(key, lock):
+    answer = True
+    end = len(key) + len(lock) - 1
+    for k in range(4):
+        for i in range(end):
+            for j in range(end):
+                start_c = i
+                start_r = j
+                if insert(key, lock, start_c, start_r, end) == True:
+                    return True
+        key = rotate(key)
+    
+    return False
+	
+```
+	
+	
 </details>
     
 정영
