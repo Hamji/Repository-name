@@ -49,7 +49,9 @@ def solution(relation):
 정영
 <details>
 <summary>접기/펼치기 버튼</summary>
+	
 ``` cpp
+	
 테스트 20 〉	통과 (0.48ms, 3.84MB)
 #include <string>
 #include <vector>
