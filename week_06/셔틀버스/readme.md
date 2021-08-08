@@ -6,6 +6,38 @@
 <details>
 <summary>접기/펼치기 버튼</summary>
 	
+``` python
+	
+	def solution(n, t, m, timetable):
+    people = []
+    people = [ int(tt.split(":")[0])*60+int(tt.split(":")[1]) for tt in timetable ]
+    people.sort()
+    
+    bus = [ (540+t*i, 0, None) for i in range(n)]
+    
+    bus_index, people_index = 0, 0
+    
+    while people_index < len(people):
+        c = people[people_index]
+        if bus_index == len(bus):
+            break
+        
+        if c <= bus[bus_index][0] and bus[bus_index][1] < m:
+            tt, count, N = bus[bus_index]
+            bus[bus_index] = (tt, count + 1, c)
+            people_index += 1
+        else :
+            bus_index += 1
+    answer = bus[-1][0]
+    if bus[-1][2]:
+        if bus[-1][1] == m:
+            answer = bus[-1][2] - 1
+            return '%02d:%02d' % (answer // 60, answer % 60)
+    return '%02d:%02d' % (answer // 60, answer % 60)
+	
+```
+	
+	
 </details>
     
 정영
