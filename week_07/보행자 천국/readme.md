@@ -73,5 +73,66 @@ int solution(int m, int n, vector<vector<int>> city_map) {
 건률
 <details>
 <summary>접기/펼치기 버튼</summary>
+	
+``` cpp
+
+테스트 1 〉	통과 (131.73ms, 7.37MB)
+	
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int MOD = 20170805;
+
+// 전역 변수를 정의할 경우 함수 내에 초기화 코드를 꼭 작성해주세요.
+int solution(int m, int n, vector<vector<int>> city_map) {
+    int answer = 0;
+    //예외처리의 간편화를 위해 배열에 왼쪽과 위쪽에 여백 추가
+    city_map.insert(city_map.begin(),vector<int>(n,0));
+    for(int i = 0; i<=m; i++){
+        city_map[i].insert(city_map[i].begin(),0);
+    }
+    vector<vector<int>> new_map(m+1,vector<int>(n+1,0));
+    new_map[0][1] = 1;
+    for(int i = 1; i<=m; i++){
+        for(int j = 1; j<=n; j++){
+            int left = 0;
+            int up = 0;
+            //접근 불가지역이면 도달불가(0)
+            if(city_map[i][j] == 1) continue;
+            //이전 y가 회전불가면 회전불가가 아닌 맨 위 블럭찾기
+            if(city_map[i-1][j] == 0){
+                up = new_map[i-1][j];
+            }
+            else if(city_map[i-1][j] == 2) {
+                for(int y = i-1; y > 0; y--){
+                    if(city_map[y][j] == 1) break;
+                    if(city_map[y][j] == 0) {
+                        up = new_map[y][j];
+                        break;
+                    }
+                }
+            }
+            //이전 x가 회전불가면 회전불가가 아닌 맨 왼 블럭찾기
+            if(city_map[i][j-1] == 0){
+                left = new_map[i][j-1];
+            }
+            else if(city_map[i][j-1] == 2) {
+                for(int x = j-1; x > 0; x--){
+                    if(city_map[i][x] == 1) break;
+                    if(city_map[i][x] == 0) {
+                        left = new_map[i][x];
+                        break;
+                    }
+                }
+            }
+            new_map[i][j] = (left + up)%20170805;
+        }
+    }
+    
+    return new_map[m][n];
+}
   
+```
 </details>
