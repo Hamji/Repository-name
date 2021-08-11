@@ -22,7 +22,6 @@ using namespace std;
 int MOD = 20170805;
 vector<vector<int>> city_path;
 
-// city_path[i+1][j]이 0 city_path[i-1][j] 통행
 int get_path(int i, int j, int dx, int dy) {
     while(city_path[i-dx][j-dy] == -2) {
         i-=dx;
