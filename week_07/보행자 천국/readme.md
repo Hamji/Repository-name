@@ -8,11 +8,12 @@
 </details>
     
 정영
-테스트 1 〉	통과 (41.60ms, 7.43MB)
 <details>
 <summary>접기/펼치기 버튼</summary>
 
 ``` cpp
+테스트 1 〉	통과 (41.60ms, 7.43MB)
+	
 #include <vector>
 #include <stdio.h>
 
