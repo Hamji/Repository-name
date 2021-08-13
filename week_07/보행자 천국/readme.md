@@ -5,6 +5,58 @@
 <details>
 <summary>접기/펼치기 버튼</summary>
 	
+``` cpp
+	#include <vector>
+
+using namespace std;
+
+int MOD = 20170805;
+
+// 전역 변수를 정의할 경우 함수 내에 초기화 코드를 꼭 작성해주세요.
+int solution(int m, int n, vector<vector<int>> city_map) {
+    int answer = 0;
+    // 500개 딱 맞게하면 넘어가서 out of range라서 [3][-1]
+    int right[501][501] = {0};
+    int down[501][501] = {0};
+    
+    // 탐색 
+    for (int i = 1; i <= m; i++)
+    {
+        for (int j = 1; j <= n; j++)
+        {
+            // 맨 처음의 경우, 시작점
+            if (i == 1 && j == 1)
+            {
+                right[i][j] = 1;
+                down[i][j] = 1;
+            }
+            // 둘다 갈 수 있는 경우 왼쪽에서 올 경우와 위에서 올 경우를 더해준다
+            else if(city_map[i-1][j-1] == 0)
+            {
+                right[i][j] = (right[i][j-1] + down[i-1][j]) % MOD;
+                down[i][j] = (right[i][j - 1] + down[i - 1][j]) % MOD;
+            }
+            // 통행 금지구역 
+            else if(city_map[i-1][j-1] == 1)
+            {
+                right[i][j] = 0;
+                down[i][j] = 0;
+            }
+            // 회전이 불가능 하므로 down은 위에 놈만 
+            // right 는 왼쪽 놈만
+            else
+            {
+                right[i][j] = right[i][j-1];
+                down[i][j] = down[i-1][j];
+            }
+        }
+    }
+    
+    // down 으로 하나 right 로 하나 상관없다 
+    return down[m][n];
+}
+``` 
+	
 </details>
     
 정영
