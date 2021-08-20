@@ -11,7 +11,55 @@
 <details>
 <summary>접기/펼치기 버튼</summary>
 
+``` cpp
+테스트 11 〉	통과 (26.07ms, 12.2MB)
+	
+#include <string>
+#include <vector>
+#include <queue>
+#include <unordered_set>
+#include <algorithm>
 
+using namespace std;
+
+int solution(int cacheSize, vector<string> cities) {
+    int answer = 0;
+    int bufferSize = 0;
+    deque<string> dq;
+    unordered_set<string> s;
+    if(cacheSize == 0) return cities.size() * 5;
+    
+    for(int i = 0; i < cities.size(); i++) {
+        transform(cities[i].begin(), cities[i].end(), cities[i].begin(), ::toupper);
+        // 버퍼가 비어있음. cache miss
+        if(bufferSize < cacheSize && s.find(cities[i]) == s.end()) {
+            answer+=5;
+            bufferSize++;
+            s.insert(cities[i]);
+            dq.push_back(cities[i]);
+        // 버퍼는 차있는데 cache miss
+        } else if(s.find(cities[i]) == s.end()) {
+            answer+=5;
+            s.insert(cities[i]);
+            dq.push_back(cities[i]);
+            s.erase(s.find(dq.front()));
+            dq.pop_front();
+        // cache hit
+        } else {
+            answer+=1;
+            for(auto it = dq.begin(); it != dq.end(); it++) {
+                if(*it == cities[i]) {
+                    dq.erase(it);
+                    break;
+                }
+            }
+            dq.push_back(cities[i]);
+        }
+    }
+    return answer;
+}
+```
+	
 </details>
     
 건률
