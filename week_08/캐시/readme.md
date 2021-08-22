@@ -4,7 +4,9 @@
 건희
 <details>
 <summary>접기/펼치기 버튼</summary>
+
 테스트 11 〉	통과 (66.85ms, 23.8MB)
+	
 ``` python
 
 def solution(cacheSize, cities):
