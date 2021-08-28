@@ -11,6 +11,205 @@
 <details>
 <summary>접기/펼치기 버튼</summary>
 
+``` cpp
+테스트 13 〉	통과 (1.18ms, 4.58MB)
+#include <string>
+#include <vector>
+#include <algorithm>
+
+#define COLUMN  1   // 0은 기둥+1
+#define BEAM    2   // 1은 보+1
+
+using namespace std;
+
+vector<vector<int>> world;
+
+vector<vector<int>> solution(int n, vector<vector<int>> build_frame) {
+    vector<vector<int>> answer;
+    world = vector<vector<int>>(n+1+4, vector<int>(n+1+4, 0));
+    
+    // build
+    for(auto frame : build_frame) {
+        int x = frame[0]+2;
+        int y = frame[1]+2;
+        int type = frame[2];
+        int op = frame[3];
+        
+        // 기둥
+        if(type == 0) {
+            // insert
+            if(op == 1) {
+                // 바닥이거나 아래 기둥이 있거나 같은 층에 보가 있는 경우
+                if(y == 2 || world[y-1][x] == COLUMN || world[y-1][x] == COLUMN+BEAM ||
+                   world[y][x] == BEAM || world[y][x-1] == BEAM || world[y][x-1] == COLUMN+BEAM ){
+                    world[y][x] += COLUMN;
+                }
+            // delete
+            } else if(op == 0) {
+                // 왼쪽 보가 없음
+                if(world[y+1][x-1] == 0 || world[y+1][x-1] == COLUMN) {
+                    // 오른쪽 보가 없음
+                    if(world[y+1][x] == 0) {
+                        world[y][x] -= COLUMN;
+                    // 오른쪽 보가 있음
+                    } else if(world[y+1][x] == BEAM || world[y+1][x] == COLUMN+BEAM){
+                        if(world[y][x+1] == COLUMN || world[y][x+1] == COLUMN+BEAM) {
+                            world[y][x] -= COLUMN;
+                        }
+                    }
+                // 왼쪽 보가 있음
+                } else {
+                    // 오른쪽 보가 없음
+                    if(world[y+1][x] == 0 || world[y+1][x] == COLUMN) {
+                        if(world[y][x-1] == COLUMN || world[y][x-1] == COLUMN+BEAM) {
+                            world[y][x] -= COLUMN;
+                        }
+                    // 오른쪽 보가 있음
+                    } else {
+                        bool left = false;
+                        if(world[y][x-1] == COLUMN || world[y][x-1]   == COLUMN+BEAM ||
+                           world[y+1][x-2] == BEAM || world[y+1][x-2] == COLUMN+BEAM ){
+                            left = true;
+                        }
+                        bool right = false;
+                        if(world[y][x+1] == COLUMN || world[y][x+1]   == COLUMN+BEAM ||
+                           world[y+1][x+1] == BEAM || world[y+1][x+1] == COLUMN+BEAM ){
+                            right = true;
+                        }
+                        if(left && right) {
+                            world[y][x] -= COLUMN;
+                        }
+                    }
+                }
+            }
+        // 보
+        } else if(type == 1) {
+            // insert
+            if(op == 1) {
+                // 아래 기둥이 있거나 양옆에 보가 있는 경우
+                if(world[y-1][x]   == COLUMN || world[y-1][x]   == COLUMN+BEAM ||
+                   world[y-1][x+1] == COLUMN || world[y-1][x+1] == COLUMN+BEAM ||
+                  (world[y][x-1] != 0 && world[y][x-1] != COLUMN &&
+                   world[y][x+1] != 0 && world[y][x+1] != COLUMN)){
+                    world[y][x] += BEAM;
+                }
+            // delete
+            } else if(op == 0) {
+                // 기둥에 이상 없는지 확인
+                bool COLUMN_FINE = false;
+                // 왼쪽에 기둥 없음
+                if(world[y][x] == BEAM) {
+                    // 오른쪽에 기둥 없음
+                    if(world[y][x+1] == 0 || world[y][x+1] == BEAM) {
+                        COLUMN_FINE = true;
+                    // 오른쪽에 기둥 있음
+                    } else {
+                        if(world[y-1][x+1] == COLUMN || world[y-1][x+1] == COLUMN+BEAM ||
+                           world[y][x+1] == COLUMN+BEAM) {
+                            COLUMN_FINE = true;
+                        }
+                    }
+                // 왼쪽에 기둥 있음
+                } else {
+                    // 오른쪽에 기둥 없음
+                    if(world[y][x+1] == 0 || world[y][x+1] == BEAM) {
+                        if(world[y-1][x] == COLUMN || world[y-1][x] == COLUMN+BEAM ||
+                           world[y][x-1] == BEAM   || world[y][x-1] == COLUMN+BEAM ){
+                            COLUMN_FINE = true;
+                        }
+                    // 오른쪽에 기둥 있음
+                    } else {
+                        bool left = false;
+                        if(world[y-1][x] == COLUMN || world[y-1][x] == COLUMN+BEAM ||
+                           world[y][x-1] == BEAM   || world[y][x-1] == COLUMN+BEAM ){
+                            left = true;
+                        }
+                        bool right = false;
+                        if(world[y-1][x+1] == COLUMN || world[y-1][x+1] == COLUMN+BEAM ||
+                           world[y][x+1] == COLUMN+BEAM) {
+                            right = true;
+                        }
+                        if(left && right) {
+                            COLUMN_FINE = true;
+                        }
+                    }
+                }
+                // 보에 이상 없는지 확인
+                bool BEAM_FINE = false;
+                // 왼쪽에 보 없음
+                if(world[y][x-1] == 0 || world[y][x-1] == COLUMN) {
+                    // 오른쪽에 보 없음
+                    if(world[y][x+1] == 0 || world[y][x+1] == COLUMN) {
+                        BEAM_FINE = true;
+                    // 오른쪽에 보 있음
+                    } else {
+                        if(world[y-1][x+1] == COLUMN || world[y-1][x+1] == COLUMN+BEAM || 
+                           world[y-1][x+2] == COLUMN || world[y-1][x+2] == COLUMN+BEAM ){
+                            BEAM_FINE = true;
+                        }
+                    }
+                // 왼쪽에 보 있음
+                } else {
+                    // 오른쪽에 보 없음
+                    if(world[y][x+1] == 0 || world[y][x+1] == COLUMN) {
+                        if(world[y-1][x]   == COLUMN || world[y-1][x]   == COLUMN+BEAM || 
+                           world[y-1][x-1] == COLUMN || world[y-1][x-1] == COLUMN+BEAM ){
+                            BEAM_FINE = true;
+                        }
+                    // 오른쪽에 보 있음
+                    } else {
+                        bool left = false;
+                        if(world[y-1][x]   == COLUMN || world[y-1][x]   == COLUMN+BEAM || 
+                           world[y-1][x-1] == COLUMN || world[y-1][x-1] == COLUMN+BEAM ){
+                            left = true;
+                        }
+                        bool right = false;
+                        if(world[y-1][x+1] == COLUMN || world[y-1][x+1] == COLUMN+BEAM || 
+                           world[y-1][x+2] == COLUMN || world[y-1][x+2] == COLUMN+BEAM ){
+                            right = true;
+                        }
+                        BEAM_FINE = left && right;
+                    }
+                }
+                
+                if(COLUMN_FINE && BEAM_FINE) {
+                    world[y][x] -= BEAM;
+                }
+            }
+        }
+        if(world[x][y] > 3 || world[x][y] < 0) throw "error"; 
+    }
+    
+    // check
+    for(int i = 0; i < world.size(); i++) {
+        for(int j = 0; j < world.size(); j++) {
+            if(world[i][j] == COLUMN || world[i][j] == BEAM) {
+                answer.push_back({j-2, i-2, world[i][j]-1});
+            } else if(world[i][j] == COLUMN+BEAM) {
+                answer.push_back({j-2, i-2, COLUMN-1});
+                answer.push_back({j-2, i-2, BEAM-1});
+            }
+        }
+    }
+    
+    // sort
+    struct {
+        bool operator()(vector<int> a, vector<int> b) const {
+            if(a[0] == b[0]) {
+                if(a[1] == b[1]) {
+                    return a[2] < b[2];
+                } else {
+                    return a[1] < b[1];
+                }
+            } else {
+                return a[0] < b[0];
+            }
+        }
+    } customLess;
+    sort(answer.begin(), answer.end(), customLess);
+    return answer;
+}
+```
 
 </details>
     
