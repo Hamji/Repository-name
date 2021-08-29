@@ -4,6 +4,51 @@
 건희
 <details>
 <summary>접기/펼치기 버튼</summary>
+
+테스트 9 〉	통과 (461.22ms, 20.7MB)
+	
+``` python
+
+import sys
+sys.setrecursionlimit(10**6)
+
+pre = []
+post = []
+
+def solution(nodeinfo):
+    level = []
+    for i in nodeinfo:
+        level.append(i[1])
+    level = sorted(list(set(level)), reverse=True)
+
+    nodes = []
+    for i, j in zip(range(len(nodeinfo)), nodeinfo):
+        temp = [i+1, j]
+        nodes.append(temp)
+    nodes.sort(key = lambda x : (-x[1][1], x[1][0]))
+    
+    order(nodes, level, 0)
+    
+    return [pre, post]
+
+def order(nodes, level, cur_level):
+    cur = nodes.pop(0)
+    pre.append(cur[0])
+    if nodes:
+        for i in range(len(nodes)):
+            if nodes[i][1][1] == level[cur_level + 1]:
+                # 현재 노드보다 x 값이 작은 것들 순회
+                if nodes[i][1][0] < cur[1][0]:
+                    temp = [x for x in nodes if x[1][0] < cur[1][0]]
+                    order(temp, level, cur_level + 1)
+                # 현재 노드보다 x 값이 큰 것들 순회
+                else:
+                    temp = [x for x in nodes if x[1][0] > cur[1][0]]
+                    order(temp, level, cur_level + 1)
+    
+    post.append(cur[0])
+	
+```
 	
 </details>
     
