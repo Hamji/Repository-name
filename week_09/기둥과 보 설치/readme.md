@@ -4,7 +4,50 @@
 건희
 <details>
 <summary>접기/펼치기 버튼</summary>
+
+테스트 17 〉	통과 (46.09ms, 10.6MB)
 	
+``` python
+	
+def unableBoGi(arr):
+    GI, BO = 0, 1
+    for x, y, i in arr:
+        # 맨 밑에, 왼쪽에 보가 있을떄, 설치지점에 보가 있을 때 를 제외하면 설치 X
+        if i == GI:
+            if y != 0 and (x, y-1, GI) not in arr and (x-1, y, BO) not in arr and (x, y, BO) not in arr:
+                return True
+        # 설치 아래 지점에 기둥, 설치 아래 오른쪽에 기둥, 양옆에 보가 있는 경우 를 제외하면 설치 X
+        else:
+            if (x, y -1, GI) not in arr and (x+1, y-1, GI) not in arr and \
+            not ((x-1, y, BO) in arr and (x+1, y , BO) in arr):
+                return True
+    return False
+
+def solution(n, build_frame):
+    answer = set()
+    
+    for x, y, i, j in build_frame:
+        item = (x, y, i)
+        if j == 1: # 설치인경우 
+            # 일단 추가
+            answer.add(item)
+            # valid 한지 검사후 valid 하지 않다면 삭제
+            if unableBoGi(answer):
+                answer.remove(item)
+            # 일단 삭제
+        elif j == 0 and item in answer:
+            answer.remove(item)
+            # valid 한지 검사 후 않다면 다시 추가
+            if unableBoGi(answer):
+                answer.add(item)
+    
+    answer = map(list, answer)
+    answer = list(answer)
+    answer.sort(key = lambda x : (x[0], x[1], x[2]))
+    return answer
+	
+```
+
 </details>
     
 정영
